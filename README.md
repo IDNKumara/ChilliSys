@@ -35,14 +35,32 @@ Buyers use the system to source produce and plan purchases.
 *   Node.js & npm
 *   Python 3.8+
 
-### Installation
+### One-Click Setup (Windows)
+The easiest way to get started is using the automated setup script.
 
 1.  **Clone the repository**
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/IDNKumara/ChilliSys.git
+    cd ChilliSys
     ```
 
-2.  **Backend Setup**
+2.  **Run the Setup Script**
+    Double-click `setup_and_run.bat` or run it from the terminal:
+    ```powershell
+    .\setup_and_run.bat
+    ```
+    This will automatically:
+    *   Set up the Python backend (virtual environment, dependencies)
+    *   Install Node.js frontend dependencies
+    *   Start both the backend (port 8000) and frontend (port 3000) servers
+
+---
+
+### Manual Installation
+
+If you prefer to set up manually:
+
+1.  **Backend Setup**
     ```bash
     cd backend
     python -m venv venv
@@ -55,7 +73,7 @@ Buyers use the system to source produce and plan purchases.
     uvicorn main:app --reload
     ```
 
-3.  **Frontend Setup**
+2.  **Frontend Setup**
     ```bash
     cd frontend
     npm install
