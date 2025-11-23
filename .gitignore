@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.DS_Store
+
+# Node
+node_modules/
+dist/
+.next/
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# Database
+*.sqlite3
+*.db
+
+# Documents
+*.pdf
