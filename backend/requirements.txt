@@ -8,3 +8,5 @@ passlib[bcrypt]
 argon2-cffi
 joblib
 scikit-learn
+pandas
+numpy
