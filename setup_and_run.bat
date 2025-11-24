@@ -57,7 +57,7 @@ echo --------------------------------------------------------
 cd "%PROJECT_ROOT%\frontend"
 
 :: Check for Node
-npm --version >nul 2>&1
+call npm --version >nul 2>&1
 if %errorlevel% neq 0 (
     echo [ERROR] Node.js/npm is not installed or not in PATH.
     pause
@@ -100,5 +100,5 @@ echo    Frontend starting on port 3000...
 echo ========================================================
 echo.
 
-npm run dev
+call npm run dev
 pause
