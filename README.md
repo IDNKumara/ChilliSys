@@ -83,6 +83,33 @@ If you prefer to set up manually:
 4.  **Access the App**
     Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Troubleshooting
+
+### Next.js Startup Error (Windows)
+If you encounter an error like `Attempted to load @next/swc-win32-x64-msvc, but an error occurred: ... is not a valid Win32 application`, it indicates a corrupted installation or cache issue. Follow these steps to fix it:
+
+1.  **Navigate to the frontend directory:**
+    ```powershell
+    cd frontend
+    ```
+
+2.  **Clean the environment:**
+    Remove existing node modules and cache.
+    ```powershell
+    rm -Recurse -Force node_modules, .next, package-lock.json
+    npm cache clean --force
+    ```
+
+3.  **Reinstall dependencies:**
+    ```powershell
+    npm install
+    ```
+
+4.  **Restart the server:**
+    ```powershell
+    npm run dev
+    ```
+
 ## Project Structure
 *   `/backend`: API, Database models, and ML prediction logic.
 *   `/frontend`: Next.js web application and UI components.
