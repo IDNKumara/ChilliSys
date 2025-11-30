@@ -35,3 +35,29 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/", response_model=list[schemas.User])
+def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
+    users = db.query(models.User).offset(skip).limit(limit).all()
+    return users
+
+@router.put("/{user_id}", response_model=schemas.User)
+def update_user(
+    user_id: int,
+    user: schemas.UserCreate,
+    db: Session = Depends(database.get_db),
+    current_user: models.User = Depends(auth.get_current_active_user)
+):
+    if current_user.role != models.UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return crud.update_user(db=db, user_id=user_id, user_update=user)
+
+@router.delete("/{user_id}", response_model=schemas.User)
+def delete_user(
+    user_id: int,
+    db: Session = Depends(database.get_db),
+    current_user: models.User = Depends(auth.get_current_active_user)
+):
+    if current_user.role != models.UserRole.ADMIN:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return crud.delete_user(db=db, user_id=user_id)

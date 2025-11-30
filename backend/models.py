@@ -23,6 +23,8 @@ class User(Base):
     inventory_items = relationship("Inventory", back_populates="supplier")
     orders_placed = relationship("Transaction", back_populates="buyer", foreign_keys="Transaction.buyer_id")
     orders_received = relationship("Transaction", back_populates="supplier", foreign_keys="Transaction.supplier_id")
+    sent_messages = relationship("Message", foreign_keys="Message.sender_id", back_populates="sender")
+    received_messages = relationship("Message", foreign_keys="Message.receiver_id", back_populates="receiver")
 
 class Inventory(Base):
     __tablename__ = "inventory"
@@ -60,3 +62,16 @@ class PriceData(Base):
     chilli_type = Column(String)
     price = Column(Float)
     is_predicted = Column(Boolean, default=False)
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    sender_id = Column(Integer, ForeignKey("users.id"))
+    receiver_id = Column(Integer, ForeignKey("users.id"))
+    content = Column(String)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    is_read = Column(Boolean, default=False)
+
+    sender = relationship("User", foreign_keys=[sender_id], back_populates="sent_messages")
+    receiver = relationship("User", foreign_keys=[receiver_id], back_populates="received_messages")

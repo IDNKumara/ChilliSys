@@ -62,6 +62,16 @@ export default function DashboardLayout({ children }) {
             <ShoppingCart className="mr-3 h-5 w-5" />
             Orders
           </Link>
+          <Link href="/dashboard/messages" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md dark:text-gray-200 dark:hover:bg-gray-700">
+            <Package className="mr-3 h-5 w-5" />
+            Messages
+          </Link>
+          {user.role === 'admin' && (
+            <Link href="/dashboard/users" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md dark:text-gray-200 dark:hover:bg-gray-700">
+              <TrendingUp className="mr-3 h-5 w-5" />
+              Users
+            </Link>
+          )}
         </nav>
         <div className="p-4 border-t dark:border-gray-700">
           <Button variant="ghost" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20" onClick={handleLogout}>

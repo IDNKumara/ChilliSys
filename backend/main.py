@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from . import models
 from .database import engine
-from .routers import users, inventory, predict, prices, dashboard
+from .routers import users, inventory, predict, prices, dashboard, messages, orders
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -13,6 +13,8 @@ app.include_router(inventory.router)
 app.include_router(predict.router)
 app.include_router(prices.router)
 app.include_router(dashboard.router)
+app.include_router(messages.router)
+app.include_router(orders.router)
 
 origins = [
     "http://localhost:3000",

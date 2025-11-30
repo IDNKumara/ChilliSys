@@ -40,6 +40,41 @@ export default function InventoryPage() {
     }
   };
 
+  const handleBuy = async (item) => {
+    const quantity = prompt(`How many kg of ${item.chilli_type} do you want to buy? (Available: ${item.quantity_kg}kg)`);
+    if (!quantity) return;
+    
+    const qty = parseFloat(quantity);
+    if (isNaN(qty) || qty <= 0 || qty > item.quantity_kg) {
+      alert('Invalid quantity');
+      return;
+    }
+
+    try {
+      await api.post('/orders/', {
+        supplier_id: item.supplier_id,
+        chilli_type: item.chilli_type,
+        quantity_kg: qty,
+        total_price: qty * item.price_per_kg
+      });
+      alert('Order placed successfully!');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to place order');
+    }
+  };
+
+  const handleDelete = async (itemId) => {
+    if (!confirm('Are you sure you want to delete this item?')) return;
+    try {
+      await api.delete(`/inventory/${itemId}`);
+      fetchInventory();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete item');
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="flex justify-between items-center mb-6">
@@ -92,6 +127,7 @@ export default function InventoryPage() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Quantity (kg)</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Price/kg</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Supplier ID</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -101,6 +137,24 @@ export default function InventoryPage() {
                 <td className="px-6 py-4 whitespace-nowrap">{item.quantity_kg}</td>
                 <td className="px-6 py-4 whitespace-nowrap">Rs. {item.price_per_kg}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{item.supplier_id}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  {user?.role === 'buyer' && (
+                    <button
+                      onClick={() => handleBuy(item)}
+                      className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                    >
+                      Buy
+                    </button>
+                  )}
+                  {user?.role === 'supplier' && user.id === item.supplier_id && (
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 ml-4"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

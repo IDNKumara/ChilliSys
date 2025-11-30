@@ -8,18 +8,22 @@ I have implemented the Chilli Management System as requested.
 - **Authentication**: JWT-based login and registration.
 - **Role-Based Access**: Admin, Supplier, Buyer roles.
 - **Inventory Management**: CRUD operations for chilli stocks.
-- **Price Prediction**: Machine Learning model (Random Forest) to predict prices.
+- **Order Management**: Full lifecycle (Place -> Accept -> Complete).
+- **Messaging**: Internal messaging system.
+- **Price Prediction**: Machine Learning model (Random Forest).
 - **API Documentation**: Available at `http://localhost:8000/docs`.
 
 ### 2. Frontend (Next.js + Tailwind CSS)
 - **Login/Register**: User authentication pages.
 - **Dashboard**: Role-based dashboard showing stats.
-- **Inventory Page**: Suppliers can add items, everyone can view.
-- **UI Components**: Reusable components (Button, Input, Layout).
+- **Inventory Page**: Suppliers can add/delete items, Buyers can buy.
+- **Orders Page**: Track and manage orders.
+- **Messages Page**: Chat with other users.
+- **Users Page**: Admin user management.
 
 ### 3. Machine Learning
 - **Model**: Random Forest Regressor trained on mock data.
-- **Prediction API**: Endpoint `/predict` to forecast prices based on supply/demand.
+- **Prediction API**: Endpoint `/predict` to forecast prices.
 
 ## How to Run
 
@@ -40,6 +44,17 @@ I have implemented the Chilli Management System as requested.
 3. Open `http://localhost:3000` in your browser.
 
 ## Verification
-- **Login**: Try registering a new user and logging in.
-- **Inventory**: Go to Dashboard -> Inventory to see items.
-- **API**: Visit `http://localhost:8000/docs` to test endpoints directly.
+
+### 1. Inventory Management
+- **Supplier**: Log in, go to Inventory, Add Item, Delete Item.
+- **Buyer**: Log in, go to Inventory, Click "Buy".
+
+### 2. Order Management
+- **Buyer**: Place an order. Go to Orders to see "Pending" status.
+- **Supplier**: Go to Orders. Click "Accept" (Confirmed) -> "Complete".
+
+### 3. Messaging
+- **Any User**: Go to Messages. Select a user. Send a message.
+
+### 4. Admin Features
+- **Admin**: Log in. Go to Users. View list. Delete a user.

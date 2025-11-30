@@ -42,3 +42,37 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[str] = None
+
+class MessageBase(BaseModel):
+    content: str
+
+class MessageCreate(MessageBase):
+    receiver_id: int
+
+class Message(MessageBase):
+    id: int
+    sender_id: int
+    receiver_id: int
+    timestamp: datetime
+    is_read: bool
+
+    class Config:
+        from_attributes = True
+
+class TransactionBase(BaseModel):
+    chilli_type: str
+    quantity_kg: float
+    total_price: float
+
+class TransactionCreate(TransactionBase):
+    supplier_id: int
+
+class Transaction(TransactionBase):
+    id: int
+    buyer_id: int
+    supplier_id: int
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

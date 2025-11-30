@@ -21,4 +21,4 @@ coverage/
 *.db
 
 # Documents
-*.pdf
+.pdf
