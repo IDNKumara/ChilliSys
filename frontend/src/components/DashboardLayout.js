@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, ShoppingCart, Package, LogOut, TrendingUp, Home } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, LogOut, TrendingUp, Home, User } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 export default function DashboardLayout({ children }) {
@@ -56,7 +56,11 @@ export default function DashboardLayout({ children }) {
           </Link>
           <Link href="/dashboard/inventory" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md dark:text-gray-200 dark:hover:bg-gray-700">
             <Package className="mr-3 h-5 w-5" />
-            Inventory
+            Marketplace
+          </Link>
+          <Link href="/dashboard/profile" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md dark:text-gray-200 dark:hover:bg-gray-700">
+            <User className="mr-3 h-5 w-5" />
+            Profile
           </Link>
           <Link href="/dashboard/orders" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md dark:text-gray-200 dark:hover:bg-gray-700">
             <ShoppingCart className="mr-3 h-5 w-5" />

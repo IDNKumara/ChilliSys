@@ -8,17 +8,10 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Chilli Management System API")
 
-app.include_router(users.router)
-app.include_router(inventory.router)
-app.include_router(predict.router)
-app.include_router(prices.router)
-app.include_router(dashboard.router)
-app.include_router(messages.router)
-app.include_router(orders.router)
-
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
+    "http://127.0.0.1:3000",
 ]
 
 app.add_middleware(
@@ -28,6 +21,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(users.router)
+app.include_router(inventory.router)
+app.include_router(predict.router)
+app.include_router(prices.router)
+app.include_router(dashboard.router)
+app.include_router(messages.router)
+app.include_router(orders.router)
 
 @app.get("/")
 def read_root():

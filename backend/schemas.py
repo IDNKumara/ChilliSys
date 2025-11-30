@@ -6,10 +6,20 @@ from .models import UserRole
 class UserBase(BaseModel):
     email: str
     full_name: str
+    address: Optional[str] = None
+    phone_number: Optional[str] = None
     role: UserRole = UserRole.BUYER
 
 class UserCreate(UserBase):
     password: str
+
+class UserUpdate(BaseModel):
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+    address: Optional[str] = None
+    phone_number: Optional[str] = None
+    password: Optional[str] = None
+    role: Optional[UserRole] = None
 
 class User(UserBase):
     id: int
@@ -32,6 +42,7 @@ class Inventory(InventoryBase):
     id: int
     supplier_id: int
     updated_at: datetime
+    supplier_name: Optional[str] = None
 
     class Config:
         from_attributes = True

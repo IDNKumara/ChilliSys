@@ -29,13 +29,17 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
-def update_user(db: Session, user_id: int, user_update: schemas.UserCreate):
+def update_user(db: Session, user_id: int, user_update: schemas.UserUpdate):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user:
         if user_update.password:
              db_user.hashed_password = get_password_hash(user_update.password)
         if user_update.full_name:
             db_user.full_name = user_update.full_name
+        if user_update.address:
+            db_user.address = user_update.address
+        if user_update.phone_number:
+            db_user.phone_number = user_update.phone_number
         if user_update.role:
             db_user.role = user_update.role
         if user_update.email:

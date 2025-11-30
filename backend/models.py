@@ -16,6 +16,8 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     full_name = Column(String)
+    address = Column(String, nullable=True)
+    phone_number = Column(String, nullable=True)
     role = Column(String, default=UserRole.BUYER)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -38,6 +40,10 @@ class Inventory(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
 
     supplier = relationship("User", back_populates="inventory_items")
+
+    @property
+    def supplier_name(self):
+        return self.supplier.full_name if self.supplier else None
 
 class Transaction(Base):
     __tablename__ = "transactions"

@@ -75,10 +75,24 @@ export default function InventoryPage() {
     }
   };
 
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
+
+  // ... (existing code)
+
+  const handleSupplierClick = async (supplierId) => {
+    try {
+      const response = await api.get(`/users/${supplierId}`);
+      setSelectedSupplier(response.data);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to fetch supplier details');
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Inventory</h1>
+        <h1 className="text-3xl font-bold">Marketplace</h1>
       </div>
 
       {user?.role === 'supplier' && (
@@ -126,7 +140,7 @@ export default function InventoryPage() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Type</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Quantity (kg)</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Price/kg</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Supplier ID</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Supplier</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">Actions</th>
             </tr>
           </thead>
@@ -136,7 +150,14 @@ export default function InventoryPage() {
                 <td className="px-6 py-4 whitespace-nowrap">{item.chilli_type}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{item.quantity_kg}</td>
                 <td className="px-6 py-4 whitespace-nowrap">Rs. {item.price_per_kg}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{item.supplier_id}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button 
+                    onClick={() => handleSupplierClick(item.supplier_id)}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {item.supplier_name || `ID: ${item.supplier_id}`}
+                  </button>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   {user?.role === 'buyer' && (
                     <button
@@ -160,6 +181,23 @@ export default function InventoryPage() {
           </tbody>
         </table>
       </div>
+
+      {selectedSupplier && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">Supplier Details</h2>
+            <div className="space-y-2">
+              <p><span className="font-semibold">Name:</span> {selectedSupplier.full_name}</p>
+              <p><span className="font-semibold">Email:</span> {selectedSupplier.email}</p>
+              <p><span className="font-semibold">Address:</span> {selectedSupplier.address || 'N/A'}</p>
+              <p><span className="font-semibold">Phone:</span> {selectedSupplier.phone_number || 'N/A'}</p>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <Button onClick={() => setSelectedSupplier(null)}>Close</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </DashboardLayout>
   );
 }
