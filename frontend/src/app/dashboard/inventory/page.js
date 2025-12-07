@@ -89,6 +89,26 @@ export default function InventoryPage() {
     }
   };
 
+  const [editingItem, setEditingItem] = useState(null);
+
+  const handleUpdateItem = async (e) => {
+    e.preventDefault();
+    try {
+      await api.put(`/inventory/${editingItem.id}`, {
+        chilli_type: editingItem.chilli_type,
+        quantity_kg: editingItem.quantity_kg,
+        price_per_kg: editingItem.price_per_kg,
+        description: editingItem.description
+      });
+      setEditingItem(null);
+      fetchInventory();
+      alert('Item updated successfully');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to update item');
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="flex justify-between items-center mb-6">
@@ -158,24 +178,32 @@ export default function InventoryPage() {
                     {item.supplier_name || `ID: ${item.supplier_id}`}
                   </button>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  {user?.role === 'buyer' && (
-                    <button
-                      onClick={() => handleBuy(item)}
-                      className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                    >
-                      Buy
-                    </button>
-                  )}
-                  {user?.role === 'supplier' && user.id === item.supplier_id && (
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 ml-4"
-                    >
-                      Delete
-                    </button>
-                  )}
-                </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    {user?.role === 'buyer' && (
+                      <button
+                        onClick={() => handleBuy(item)}
+                        className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                      >
+                        Buy
+                      </button>
+                    )}
+                    {(user?.role === 'admin' || (user?.role === 'supplier' && user.id === item.supplier_id)) && (
+                      <>
+                        <button
+                          onClick={() => setEditingItem(item)}
+                          className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 ml-4"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id)}
+                          className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 ml-4"
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </td>
               </tr>
             ))}
           </tbody>
@@ -195,6 +223,46 @@ export default function InventoryPage() {
             <div className="mt-6 flex justify-end">
               <Button onClick={() => setSelectedSupplier(null)}>Close</Button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {editingItem && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">Edit Item</h2>
+            <form onSubmit={handleUpdateItem} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Chilli Type</label>
+                <Input
+                  value={editingItem.chilli_type}
+                  onChange={(e) => setEditingItem({...editingItem, chilli_type: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Quantity (kg)</label>
+                <Input
+                  type="number"
+                  value={editingItem.quantity_kg}
+                  onChange={(e) => setEditingItem({...editingItem, quantity_kg: parseFloat(e.target.value)})}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Price per kg (Rs)</label>
+                <Input
+                  type="number"
+                  value={editingItem.price_per_kg}
+                  onChange={(e) => setEditingItem({...editingItem, price_per_kg: parseFloat(e.target.value)})}
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-2 mt-6">
+                <Button type="button" variant="ghost" onClick={() => setEditingItem(null)}>Cancel</Button>
+                <Button type="submit">Save Changes</Button>
+              </div>
+            </form>
           </div>
         </div>
       )}
